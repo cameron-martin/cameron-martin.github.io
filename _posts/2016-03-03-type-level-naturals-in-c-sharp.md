@@ -98,6 +98,8 @@ public class ConsVector<LMinusOne, T> : Vector <Nat.Succ<LMinusOne>, T>
 }
 {% endhighlight %}
 
+The name `Cons` is standard in functional programming languages. [It seems to come from Lisp][cons].
+
 Because type parameter inference does not work for constructors, we need to create some helper functions to give us more terse syntax for creating these vectors.
 
 {% highlight c# %}
@@ -255,3 +257,4 @@ Open questions:
 
 [Idris]: http://www.idris-lang.org/
 [peano]: https://en.wikipedia.org/wiki/Peano_axioms
+[cons]: https://en.wikipedia.org/wiki/Cons
