@@ -54,12 +54,12 @@ public abstract class Vector<L, T> : IEnumerable<T>
     where L : Nat
 {
     public abstract IEnumerator<T> GetEnumerator();
-    
+
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
-    
+
     public override string ToString()
     {
         return "[" + String.Join(", ", this) + "]";
@@ -79,7 +79,7 @@ public class ConsVector<LMinusOne, T> : Vector <Nat.Succ<LMinusOne>, T>
 {
     public T Head { get; }
     public Vector<LMinusOne, T> Tail { get; }
-    
+
     public ConsVector(T head, Vector<LMinusOne, T> tail)
     {
         Head = head;
@@ -89,7 +89,7 @@ public class ConsVector<LMinusOne, T> : Vector <Nat.Succ<LMinusOne>, T>
     public override IEnumerator<T> GetEnumerator()
     {
         yield return Head;
-        
+
         foreach(var item in this.Tail)
         {
             yield return item;
@@ -107,18 +107,18 @@ class VectorDemo
     {
         return new EmptyVector<T>();
     }
-    
+
     public static ConsVector<LMinusOne, T> Cons<LMinusOne, T>(T head, Vector<LMinusOne, T> tail)
         where LMinusOne : Nat
     {
         return new ConsVector<LMinusOne, T>(head, tail);
     }
-    
+
     public static ConsVector<Nat.Zero, T> Cons<T>(T head)
     {
         return Cons(head, Empty<T>());
     }
-    
+
     static void Main()
     {
         var vect1 = Cons(1, Cons(2));
@@ -130,19 +130,19 @@ class VectorDemo
 }
 {% endhighlight %}
 
-They work! But we can't really do anything with them yet, so let's define some of the fundamental operations for lists: `Map`, `ZipWith` and both left and right fold.
+Okay, so we can create and print our length-encoded lists. But we can't do much else with them yet, so let's define some of the fundamental operations for lists: `Map`, `ZipWith` and both left and right fold.
 
 {% highlight c# %}
 public abstract class Vector<L, T> : IEnumerable<T>
     where L : Nat
 {
     public abstract IEnumerator<T> GetEnumerator();
-    
+
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
-    
+
     public override string ToString()
     {
         return "[" + String.Join(", ", this) + "]";
@@ -165,17 +165,17 @@ public class EmptyVector<T> : Vector<Nat.Zero, T>
     {
         return new EmptyVector<B>();
     }
-    
+
     public override Vector<Nat.Zero, A> Map<A>(Func<T, A> f)
     {
         return new EmptyVector<A>();
     }
-    
+
     public override A FoldL<A>(Func<A, T, A> f, A init)
     {
         return init;
     }
-    
+
     public override A FoldR<A>(Func<T, A, A> f, A init)
     {
         return init;
@@ -187,7 +187,7 @@ public class ConsVector<LMinusOne, T> : Vector <Nat.Succ<LMinusOne>, T>
 {
     public T Head { get; }
     public Vector<LMinusOne, T> Tail { get; }
-    
+
     public ConsVector(T head, Vector<LMinusOne, T> tail)
     {
         Head = head;
@@ -197,30 +197,30 @@ public class ConsVector<LMinusOne, T> : Vector <Nat.Succ<LMinusOne>, T>
     public override IEnumerator<T> GetEnumerator()
     {
         yield return Head;
-        
+
         foreach(var item in this.Tail)
         {
             yield return item;
         }
     }
-    
+
     public override Vector<Nat.Succ<LMinusOne>, B> ZipWith<A, B>(Func<T, A, B> zipper, Vector<Nat.Succ<LMinusOne>, A> otherVect)
     {
         var otherCasted = (ConsVector<LMinusOne, A>) otherVect;
-        
+
         return new ConsVector<LMinusOne, B>(zipper(this.Head, otherCasted.Head), this.Tail.ZipWith(zipper, otherCasted.Tail));
     }
-    
+
     public override Vector<Nat.Succ<LMinusOne>, A> Map<A>(Func<T, A> f)
     {
         return new ConsVector<LMinusOne, A>(f(Head), Tail.Map(f));
     }
-    
+
     public override A FoldL<A>(Func<A, T, A> f, A init)
     {
         return this.Tail.FoldL(f, f(init, this.Head));
     }
-    
+
     public override A FoldR<A>(Func<T, A, A> f, A init)
     {
         return f(this.Head, this.Tail.FoldR(f, init));
