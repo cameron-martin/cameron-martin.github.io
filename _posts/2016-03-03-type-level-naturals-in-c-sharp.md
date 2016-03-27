@@ -24,6 +24,8 @@ data Vect : Nat -> Type -> Type where
   (::) : (x : a) -> (xs : Vect k a) -> Vect (S k) a
 {% endhighlight %}
 
+This gives us types such as `Vect 1 Nat`, which contains only single-element lists with elements belonging to the type `Nat`. This is a different type to `Vect 2 Nat`, which contains all 2-element lists with elements belonging to the type `Nat`.
+
 This is easy in Idris, but how would we do it in a more everyday language, C#?
 
 {% highlight c# %}
