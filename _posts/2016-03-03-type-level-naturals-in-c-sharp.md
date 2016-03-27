@@ -47,7 +47,7 @@ public class Nat
 
 This lets us construct natural numbers at the type level. So the type `Zero` represents the number `0`, `Succ<Zero>` represents the number `1`, `Succ<Succ<Zero>>` represents the number `2`, and so on.
 
-We can then create a `Vector` type, a linked list which is parametrised by it's length. Just like the Idris example, a member of the type `Vector` is either an empty vector, or it constructs a vector of length n+1, given a vector of length n and an element. In the absense of sum types, we'll use inheritence for this.
+We can then create a `Vector` type, a linked list which is parametrised by it's length. Just like the Idris example, a member of the type `Vector` is either an *empty vector* (of length 0), or it is a *vector of length n+1*, constructed from an element (known as the head) and a vector of length n (known as the tail). In the absence of sum types, we'll use inheritance to model these two possibilities.
 
 {% highlight c# %}
 public abstract class Vector<L, T> : IEnumerable<T>
