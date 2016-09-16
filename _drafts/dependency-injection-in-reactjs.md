@@ -33,7 +33,21 @@ export default todoItemService => class TodoItem extends React.Component {
     );
   }
 }
+```
 
 So, we now have dependency injection that is succinct, and most importantly and unlike the service locator based solutions, the dependencies are explicit.
 
+Now we have made our dependencies injectable, we can now wire them up. Most JS IoC containers do not let you inject dependencies as function arguments. This is one of the reasons that I created my own, [Speedball], and this is what I will be using here.
+
+```javascript
+import TodoItemService from './TodoItemService';
+import TodoItem from './TodoItem';
+
+const speedball = new Speedball()
+  .register('todoItemService', construct(TodoItemService))
+  .register('TodoItem', func(TodoItem, ['todoItemService']))
+```
+
+
 [di1]: https://www.npmjs.com/package/react-di
+[Speedball]: https://github.com/cameron-martin/speedball 
