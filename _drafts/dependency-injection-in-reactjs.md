@@ -42,11 +42,19 @@ Now we have made our dependencies injectable, we can now wire them up. Most JS I
 ```javascript
 import TodoItemService from './TodoItemService';
 import TodoItem from './TodoItem';
+import TodoList from './TodoList';
 
-const speedball = new Speedball()
+export default new Speedball()
   .register('todoItemService', construct(TodoItemService))
   .register('TodoItem', func(TodoItem, ['todoItemService']))
+  .register('TodoList', func(TodoList, ['TodoItem']));
 ```
+
+```javascript
+
+```
+
+
 
 
 [di1]: https://www.npmjs.com/package/react-di
